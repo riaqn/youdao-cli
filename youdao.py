@@ -1,6 +1,7 @@
 #!/bin/env python
 keyfrom = 'jvhuatk'
 key = 1230989153
+
 from sys import argv
 query = ' '.join(argv[1:])
 
@@ -13,14 +14,22 @@ result = loads(res.read().decode('utf-8'))
 print(', '.join(result['translation']))
 print()
 
+bold='\033[1m'
+cyan='\033[0;36m'
+highlight = '\033[1;31m'
+end = '\033[0m'
+
+from re import sub, IGNORECASE
+
 try:
-    print(result['query'], '[%s]' % (result['basic']['phonetic']))
+    print('%s%s%s' % (bold, result['query'], end), '%s[%s]%s' % (cyan, result['basic']['phonetic'], end))
 except KeyError:
     print(result['query'])
     
 for explain in result['basic']['explains']:
-    print(explain)
+    print(sub(r'^([a-z]+\.)', r'%s\1%s' % (bold, end), explain))
+
 
 print()
 for explain in result['web']:
-    print(explain['key'], ','.join(explain['value']))
+    print(sub(r'(\b)(%s)(\b)' % (result['query'],), r'\1%s\2%s\3' % (highlight, end), explain['key'], flags=IGNORECASE), ','.join(explain['value']))
