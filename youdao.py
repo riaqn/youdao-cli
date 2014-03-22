@@ -26,7 +26,7 @@ if 'basic' in result:
     try:
         print('%s[%s]%s' % (cyan, result['basic']['phonetic'], end))
     except KeyError:
-        pass
+        print()
     try:
         for explain in result['basic']['explains']:
             print(sub(r'^([a-z]+\.)', r'%s\1%s' % (bold, end), explain))
