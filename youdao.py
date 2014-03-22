@@ -18,7 +18,7 @@ cyan='\033[0;36m'
 highlight = '\033[1;31m'
 end = '\033[0m'
 
-from re import sub, IGNORECASE
+from re import sub, subn, IGNORECASE
 
 if 'basic' in result:
     print()
@@ -36,4 +36,7 @@ if 'basic' in result:
 if 'web' in result:
     print()
     for explain in result['web']:
-        print(sub(r'(\b)(%s)(\b)' % (result['query'],), r'\1%s\2%s\3' % (highlight, end), explain['key'], flags=IGNORECASE), ','.join(explain['value']))
+        (key, count) = subn(r'(\b)(%s)(\b)' % (result['query'],), r'\1%s\2%s\3' % (highlight, end), explain['key'], flags=IGNORECASE)
+        if count == 0:
+            key = sub(r'(%s)' % (result['query']), r'%s\1%s' % (highlight, end), explain['key'], flags=IGNORECASE)
+        print(key, ','.join(explain['value']))
